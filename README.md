@@ -6,7 +6,8 @@ postgresql高效分区
 本分区适用于zabbix建立分区表
 创建下列函数:
 #zabbix_partition_maintenance()
-	CREATE OR REPLACE FUNCTION zabbix_partition_maintenance(VARCHAR, INTEGER DEFAULT NULL, INTEGER DEFAULT NULL, INTEGER DEFAULT 0, VARCHAR DEFAULT 'zabbix', BOOLEAN DEFAULT FALSE)
+
+	CREATE OR REPLACE FUNCTION zabbix_partition_maintenance(VARCHAR, INTEGER DEFAULT NULL, INTEGER DEFAULT NULL, INTEGER 		DEFAULT 0, VARCHAR DEFAULT 'zabbix', BOOLEAN DEFAULT FALSE)
 	RETURNS void AS
 	$BODY$
 	DECLARE
@@ -127,6 +128,7 @@ postgresql高效分区
 	ALTER FUNCTION partition_maintenance(VARCHAR, VARCHAR, VARCHAR, INTEGER, INTEGER, BOOLEAN)
 	OWNER TO zabbix;
 #add_partition()
+
 	CREATE OR REPLACE FUNCTION add_partition(VARCHAR, VARCHAR, INTEGER, INTEGER, VARCHAR, BOOLEAN DEFAULT FALSE)
 	RETURNS void AS
 	$BODY$
@@ -172,6 +174,7 @@ postgresql高效分区
 	ALTER FUNCTION add_partition(VARCHAR, VARCHAR, INTEGER, INTEGER, VARCHAR, BOOLEAN)
 	OWNER TO zabbix;
 #remove_partitions()
+
 	CREATE OR REPLACE FUNCTION remove_partitions(VARCHAR, INTEGER, INTEGER, INTEGER, INTEGER, BOOLEAN DEFAULT FALSE)
 	RETURNS void AS
 	$BODY$
@@ -222,6 +225,7 @@ CREATE TRIGGER trends_part_trig       BEFORE INSERT ON trends       FOR EACH ROW
 CREATE TRIGGER trends_uint_part_trig  BEFORE INSERT ON trends_uint  FOR EACH ROW EXECUTE PROCEDURE trends_uint_part_trig_func();
 
 开始分区
+
 SELECT zabbix_partition_maintenance('1 week', 10, NULL, 1, 'zabbix', TRUE);
 参数一:可以是month week day 等
 参数二：history表保存的天数 默认为NULL
@@ -238,6 +242,7 @@ vi .pgpass
 127.0.0.1:5432:zabbix:zabbix:zabbix
 
 cat maintainZbxDbPartitions.sh
+
 #!/bin/bash
 echo `psql -h 127.0.0.1 -p 5432 -d zabbix -U zabbix << EOF
  \set VERBOSITY 'terse'
